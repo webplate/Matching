@@ -6,6 +6,7 @@ joker="~"
 def delta_from_pattern(pattern, alphabet):
     state=0
     relations=[]
+    #liste les trajets impliqués par le motif
     for c in pattern:
         if c == joker:
             for char in alphabet:
@@ -16,6 +17,7 @@ def delta_from_pattern(pattern, alphabet):
         state+=1
     delta=[]
     state+=1
+    #genere matrice des liens dirigés
     for i in range(state):
         delta.append([])
         for j in range(state):
@@ -30,8 +32,7 @@ def delta_from_pattern(pattern, alphabet):
 def match(pattern, word):
     #genere alphabet
     alphabet=""
-    str=pattern+word
-    for c in str:
+    for c in pattern+word:
         if c not in alphabet and c != joker:
             alphabet+=c
     #genere delta
@@ -44,7 +45,7 @@ def match(pattern, word):
         next.append(False)
     #active état init
     curr[0]=True
-
+    #determine les états suivants
     for c in word:
         for i in range(states):
             if curr[i]:
@@ -53,11 +54,11 @@ def match(pattern, word):
                     #si prochain état accessible
                     if delta[i][j][e]:
                         next[j] = True
-                    #ou s'il est transitoire
+                    #ou si l'état actuel est transitoire
                     elif i == j:
                         next[j] = False
         curr=next[:]
     #si l'état final est atteint
     return curr[-1]
 
-print match("a~a~ARF~", "abaiARFi")
+print match("a~a~ARF~", "aba(ARF)")
