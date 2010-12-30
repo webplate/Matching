@@ -1,20 +1,25 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from testsuite import *
 
 joker="~"
 
 def delta_from_pattern(pattern, alphabet):
     state=0
     relations=[]
+    pre=""
     #liste les trajets impliqués par le motif
     for c in pattern:
-        if c == joker:
-            for char in alphabet:
-                relations.append((state, char, state+1))
-                relations.append((state+1, char, state+1))
-        else:
-            relations.append((state, c, state+1))
-        state+=1
+        #évite répétition de joker
+        if not (pre == joker and c == joker):
+            if c == joker:
+                for char in alphabet:
+                    relations.append((state, char, state+1))
+                    relations.append((state+1, char, state+1))
+            else:
+                relations.append((state, c, state+1))
+            state+=1
+            pre=c
     delta=[]
     state+=1
     #genere matrice des liens dirigés
@@ -35,8 +40,10 @@ def match(pattern, word):
     for c in pattern+word:
         if c not in alphabet and c != joker:
             alphabet+=c
+    print "alphabet généré"
     #genere delta
     delta, states = delta_from_pattern(pattern, alphabet)
+    print "delta généré"
     #initialise les vecteurs de position
     curr=[]
     next=[]
@@ -61,4 +68,4 @@ def match(pattern, word):
     #si l'état final est atteint
     return curr[-1]
 
-print match("a~a~ARF~", "aba(ARF)")
+print match("A~Lorem~D", word)
