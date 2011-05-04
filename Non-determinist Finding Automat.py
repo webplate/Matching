@@ -40,10 +40,8 @@ def match(pattern, word):
     for c in pattern+word:
         if c not in alphabet and c != joker:
             alphabet+=c
-    print "alphabet généré"
     #genere delta
     delta, states = delta_from_pattern(pattern, alphabet)
-    print "delta généré"
     #initialise les vecteurs de position
     curr=[]
     next=[]
@@ -68,4 +66,4 @@ def match(pattern, word):
     #si l'état final est atteint
     return curr[-1]
 
-print match("A~Lorem~D", word)
+print match(short_pattern, short)
